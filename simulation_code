@@ -1,0 +1,168 @@
+%matplotlib inline
+from scipy import stats
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+
+def create_unif_pop(n):    
+    distrib = 1000 * np.random.random_sample((n, ))    
+    return distrib
+
+def create_norm_pop(n):    
+    distrib = 1000 * np.random.normal(0,1,(n, ))    
+    return distrib
+
+def create_skew_pop(n):    
+    distrib = 1000 * np.random.noncentral_f(3, 10, 3, (n, ))   
+    return distrib
+    
+def graph_distribution(dist, name):    
+    plt.hist(dist)   
+    plt.title(name)  
+    plt.show()
+    
+def sample_procedure(dist):    
+    sample_size = int(raw_input("Enter the sample size:"))    
+    sample_repeats = int(raw_input("Enter the number of times to repeat the experiment:"))    
+    sample_means = []   
+    count = 0    
+    #the count variable keeps tracks of the time the sample is repeated.
+   
+   for _ in range(sample_repeats):              
+      sample = np.random.choice(dist, (sample_size, ))       
+      this_mean = np.mean(sample)       
+      sample_means.append(this_mean)       
+      t_score = stats.t.ppf(0.975,df=sample_size-1)  
+      #because the area not included on both tails is 5%       
+      #so in order to calculate 95% interval, we find the t-score of97.5 percentile.
+      lower_bound = this_mean - t_score * stats.sem(sample)      
+      upper_bound = this_mean + t_score * stats.sem(sample)       
+      if np.mean(dist) > lower_bound and np.mean(dist) < upper_bound:
+          count += 1        
+      # the if function will keep track of the number of times the population mean falls within the confidence intervals.
+       
+      print "Here's what the sample mean distribution looks like."       
+      
+      plt.hist(sample_means)
+      plt.title('Sample Means')
+      plt.show() 
+      
+      print "The mean of the sample means is:", np.mean(sample_means)    
+      print "The standard error of the sampling distribution of some distribution for a fixed sample size is:", np.std(sample_means)    
+      #because the standard error is the standard deviation of the sample distribution so it can be calculated using the SD code
+      print "the number of times the population mean falls within the confidence intervals is:", count    
+      print ""
+
+print "First create a (pseudo)-random population distribution."population_size = int(raw_input("Enter a population size:"))
+print "Now choose an approximate shape."
+pop_type = 0
+while pop_type < 1 or pop_type > 3:    
+    pop_type = int(raw_input("Enter 1 for uniform, 2 for normal-like,or 3 for skewed:") )                 
+
+if pop_type == 1:    
+    population = create_unif_pop(population_size)
+elif pop_type == 2:                      
+    population = create_norm_pop(population_size)
+elif pop_type == 3:                      
+    population = create_skew_pop(population_size)
+
+print "Here's what the population distribution looks like."graph_distribution(population, 'Population Distribution')
+
+print "The population mean is:", np.mean(population) ## look this up
+
+print "For the second step, enter the size of the samples to draw --with replacement-- from the population distribution, and how many timesto repeat this procedure in order to create a distribution of sample means."
+
+sample_flag = True
+
+while sample_flag:    
+    sample_procedure(population)    
+    print "Perform sampling procedure again? Note that if no, then thepopulation distribution will be lost.
+    decision = raw_input("Type y or n:")    
+    if decision == 'n':        
+        sample_flag = False    
+    else:        
+        print "Doing procedure again."
+        
+        
+%matplotlib inline
+from scipy import stats
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+
+def create_unif_pop(n):    
+    distrib = 1000 * np.random.random_sample((n, ))   
+    return distrib
+
+def create_norm_pop(n):    
+distrib = 1000 * np.random.normal(0,1,(n, )) 
+return distrib
+
+def create_skew_pop(n):  
+    distrib = 1000 * np.random.noncentral_f(3, 10, 3, (n, ))   
+    return distrib
+
+def graph_distribution(dist, name):   
+    plt.hist(dist)   
+    plt.title(name)  
+    plt.show()        
+ 
+def sample_procedure(dist):    
+    sample_size = int(raw_input("Enter the sample size:"))  
+    sample_repeats = int(raw_input("Enter the number of times to repeat the experiment:"))   
+    sample_means = []   
+    count = 0   
+    #the count variable keeps tracks of the time the sample is repeated.
+    for _ in range(sample_repeats):            
+   
+        sample = np.random.choice(dist, (sample_size, ))      
+       this_mean = np.mean(sample)      
+        sample_means.append(this_mean)       
+        t_score = stats.t.ppf(0.995,df=sample_size-1)       
+        #because the area not included on both tails is 1%    
+        #so in order to calculate 99% interval, we find the t-score of 99.5 percentile.
+        lower_bound = this_mean - t_score * stats.sem(sample)       
+        upper_bound = this_mean + t_score * stats.sem(sample)        
+        if np.mean(dist) > lower_bound and np.mean(dist) < upper_bound:           
+            count += 1       
+         # the if function will keep track of the number of times the population mean falls within the confidence intervals.
+    print "Here's what the sample mean distribution looks like."      
+    
+    plt.hist(sample_means)   
+    plt.title('Sample Means')  
+    plt.show()       
+    
+    print "The mean of the sample means is:", np.mean(sample_means)   
+    print "The standard error of the sampling distribution of some distribution for a fixed sample size is:", np.std(sample_means)   
+    #because the standard error is the standard deviation of the sample distribution so it can be calculated using the SD code.
+    print "the number of times the population mean falls within the confidence intervals is:", count    
+    print ""
+
+print "First create a (pseudo)-random population distribution."population_size = int(raw_input("Enter a population size:"))
+print "Now choose an approximate shape."pop_type = 0
+while pop_type < 1 or pop_type > 3:    
+    pop_type = int(raw_input("Enter 1 for uniform, 2 for normal-like,or 3 for skewed:") )                 
+
+if pop_type == 1:
+   population = create_unif_pop(population_size)
+elif pop_type == 2:                     
+    population = create_norm_pop(population_size)
+elif pop_type == 3:                    
+    population = create_skew_pop(population_size)
+
+print "Here's what the population distribution looks like."graph_distribution(population, 'Population Distribution')
+
+print "The population mean is:", np.mean(population) ## look this up
+
+print "For the second step, enter the size of the samples to draw --with replacement-- from the population distribution, and how many timesto repeat this procedure in order to create a distribution of sample means."
+
+sample_flag = True
+
+while sample_flag:    
+    sample_procedure(population)    
+    print "Perform sampling procedure again? Note that if no, then thepopulation distribution will be lost."    
+    decision = raw_input("Type y or n:")    
+    if decision == 'n':        
+        sample_flag = False   
+    else:        
+        print "Doing procedure again."
